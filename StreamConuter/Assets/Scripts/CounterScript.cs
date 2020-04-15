@@ -31,14 +31,43 @@ public class CounterScript : MonoBehaviour
     public void IncreaseCounter()
     {
         counter++;
-        text.text = counter.ToString();
+
+        if (manager.hasTarget)
+        {
+            text.text = string.Format($"{counter.ToString()} / {manager.targetValue.ToString()}");
+        }
+        else
+        {
+            text.text = counter.ToString();
+        }
     }
 
     public void ResetCounter()
     {
         counter = 0;
-        text.text = counter.ToString();
+
+        if (manager.hasTarget)
+        {
+            text.text = string.Format($"{counter.ToString()} / {manager.targetValue.ToString()}");
+        }
+        else
+        {
+            text.text = counter.ToString();
+        }
+
         PlayerPrefs.SetInt(manager.counterSaveKey, counter);
+    }
+
+    public void ToggleHasTarget(bool hasTarget)
+    {
+        if (hasTarget)
+        {
+            text.text = string.Format($"{counter.ToString()} / {manager.targetValue.ToString()}");
+        }
+        else
+        {
+            text.text = counter.ToString();
+        }
     }
 
     private void OnApplicationQuit()

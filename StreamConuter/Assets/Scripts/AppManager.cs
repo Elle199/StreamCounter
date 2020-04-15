@@ -16,14 +16,20 @@ public class AppManager : MonoBehaviour
     [SerializeField] public string counterSaveKey = "Counter";
     [SerializeField] public string fontSizeKey = "FontSize";
     [SerializeField] public string colorKey = "Color";
+    [SerializeField] public string hasTargetKey = "hasTargetValue";
+    [SerializeField] public string targetValueKey = "TargetValue";
     [SerializeField] public int increaseAmmount = 1;
     [SerializeField] public int fontSize = 72;
     [SerializeField] public Color backgroundColor = Color.green;
+    [SerializeField] public bool hasTarget = false;
+    [SerializeField] public int targetValue = 0;
 
     [Header("UI Elements")]
     [SerializeField] public Image background;
     [SerializeField] public TextMeshProUGUI counterText;
     [SerializeField] public TMP_InputField keybindInput;
+    [SerializeField] public TMP_InputField targetValueField;
+    [SerializeField] public Toggle hasTargetToggle;
 
     [SerializeField] private CounterScript activeCounter;
 
@@ -140,6 +146,11 @@ public class AppManager : MonoBehaviour
         }
 
         return keyStrokes;
+    }
+
+    public void ApplyHasTarget()
+    {
+        activeCounter.ToggleHasTarget(hasTarget);
     }
 
     public void SaveSettings()

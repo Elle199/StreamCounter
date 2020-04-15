@@ -37,6 +37,29 @@ public class ButtonHandler : MonoBehaviour
             FlexibleColorPicker.startingColor = manager.backgroundColor;
             manager.background.color = manager.backgroundColor;
         }
+
+        if (PlayerPrefs.HasKey(manager.hasTargetKey))
+        {
+            bool hasTarget = Convert.ToBoolean(PlayerPrefs.GetString(manager.hasTargetKey));
+
+            if (hasTarget)
+            {
+                manager.hasTarget = true;
+                manager.targetValueField.gameObject.SetActive(true);
+                manager.hasTargetToggle.isOn = true;
+            }
+            else
+            {
+                manager.hasTarget = false;
+                manager.targetValueField.gameObject.SetActive(false);
+                manager.hasTargetToggle.isOn = false;
+            }
+        }
+
+        if (PlayerPrefs.HasKey(manager.targetValueKey))
+        {
+            manager.targetValue = PlayerPrefs.GetInt(manager.targetValueKey);
+        }
     }
 
     public void OpenSettings()
@@ -44,6 +67,7 @@ public class ButtonHandler : MonoBehaviour
         StartCoroutine(ActionAfterAnim(settingsAnim, "openSettings", true));
 
         manager.keybindInput.text = manager.keybind;
+        manager.targetValueField.text = manager.targetValue.ToString();
 
         openColorBtn.GetComponent<Image>().color = manager.backgroundColor;
 
@@ -96,6 +120,21 @@ public class ButtonHandler : MonoBehaviour
         manager.SaveKeybinding();
     }
 
+    public void ToggleHasTarget()
+    {
+        manager.hasTarget = manager.hasTargetToggle.isOn;
+        manager.targetValueField.gameObject.SetActive(manager.hasTargetToggle.isOn);
+        PlayerPrefs.SetString(manager.hasTargetKey, manager.hasTargetToggle.isOn.ToString());
+        manager.ApplyHasTarget();
+    }
+
+    public void ApplyTargetValue()
+    {
+        manager.targetValue = Convert.ToInt32(manager.targetValueField.text);
+        PlayerPrefs.SetInt(manager.targetValueKey, Convert.ToInt32(manager.targetValueField.text));
+        manager.ApplyHasTarget();
+    }
+
     #region ColorPicker
     public void OpenColorPicker()
     {
@@ -138,5 +177,7 @@ public class ButtonHandler : MonoBehaviour
 
         PlayerPrefs.SetString(manager.colorKey, colorString);
         PlayerPrefs.SetInt(manager.fontSizeKey, fontSize);
+        PlayerPrefs.SetString(manager.hasTargetKey, manager.hasTargetToggle.isOn.ToString());
+        PlayerPrefs.SetInt(manager.targetValueKey, Convert.ToInt32(manager.targetValueField.text));
     }
 }
